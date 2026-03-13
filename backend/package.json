@@ -1,0 +1,35 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "nodemon src/server.ts",
+    "start": "node build/server.js",
+    "make-migration": "knex migrate:make",
+    "migrate": "knex migrate:latest",
+    "rollback": "knex migrate:rollback",
+    "make-seed": "knex seed:make",
+    "run-seed": "knex seed:run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "knex": "^3.1.0",
+    "mongoose": "^9.3.0",
+    "mysql2": "^3.19.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.4.0",
+    "nodemon": "^3.1.14",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.9.3"
+  }
+}
