@@ -9,6 +9,7 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "typeRoots": ["types"],
-    "outDir": "./packages/server/build"
+    "outDir": "dist",
+    "rootDir": "src"
   }
 }
