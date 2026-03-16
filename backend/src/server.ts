@@ -3,12 +3,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 
 import { connectMongo } from "./config/mongo";
-
-// import authRoutes from "./routes/authRoutes";
-// import productRoutes from "./routes/productRoutes";
-// import cartRoutes from "./routes/cartRoutes";
-// import orderRoutes from "./routes/orderRoutes";
-// import reportRoutes from "./routes/reportRoutes";
+import router from "./modules";
+import db from "./config/db";
 
 dotenv.config();
 
@@ -18,11 +14,16 @@ app.use(cors());
 app.use(express.json());
 
 /* Routes */
-// app.use("/auth", authRoutes);
-// app.use("/products", productRoutes);
-// app.use("/cart", cartRoutes);
-// app.use("/orders", orderRoutes);
-// app.use("/reports", reportRoutes);
+app.use("/api", router);
+
+/* Test MySQL connection */
+db.raw("SELECT 1")
+  .then(() => {
+    console.log("MySQL connected");
+  })
+  .catch((err) => {
+    console.error("MySQL connection error:", err);
+  });
 
 /* Mongo connection */
 connectMongo();

@@ -8,7 +8,8 @@
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
     "make-seed": "knex seed:make",
-    "run-seed": "knex seed:run"
+    "run-seed": "knex seed:run",
+    "mongo-seed": "ts-node src/db/seeds/index.ts"
   },
   "keywords": [],
   "author": "",
