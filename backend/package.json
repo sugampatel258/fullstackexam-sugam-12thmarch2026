@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "nodemon src/server.ts",
     "build": "tsc",
-     "start": "ts-node src/server.ts",
+     "start": "npm install && ts-node src/server.ts",
     "make-migration": "knex migrate:make",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
