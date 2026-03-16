@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-import { seedProducts } from "./products.seed";
+import { seedProducts } from "../seeds/products";
 
 dotenv.config();
 

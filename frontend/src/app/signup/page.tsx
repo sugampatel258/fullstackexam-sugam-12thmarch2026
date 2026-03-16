@@ -1,75 +1,69 @@
 "use client";
 
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signupSchema } from "@/validations/";
+import { z } from "zod";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+
+type SignupFormData = z.infer<typeof signupSchema>;
 
 export default function SignupPage() {
-  const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignupFormData>({
+    resolver: zodResolver(signupSchema),
+  });
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleSignup = async () => {
+  const onSubmit = async (data: SignupFormData) => {
     try {
-      await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}auth/signup`, {
-        name,
-        email,
-        password,
-      });
+      await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}auth/signup`, data);
 
-      alert("Registration successful!");
-
-      router.push("/signin");
-    } catch (error: any) {
-      alert(error.response?.data?.message || "Signup failed");
+      alert("Signup successful");
+    } catch (error) {
+      alert("Signup failed");
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h1 className="text-2xl font-bold mb-6 text-center">Create Account</h1>
+    <div className="p-10">
+      <h1 className="text-2xl font-bold mb-6">Signup</h1>
 
-        <input
-          type="text"
-          placeholder="Full Name"
-          className="border p-2 w-full mb-4 rounded"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <div>
+          <input
+            {...register("name")}
+            placeholder="Name"
+            className="border p-2 w-full"
+          />
+          <p className="text-red-500">{errors.name?.message}</p>
+        </div>
 
-        <input
-          type="email"
-          placeholder="Email"
-          className="border p-2 w-full mb-4 rounded"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <div>
+          <input
+            {...register("email")}
+            placeholder="Email"
+            className="border p-2 w-full"
+          />
+          <p className="text-red-500">{errors.email?.message}</p>
+        </div>
 
-        <input
-          type="password"
-          placeholder="Password"
-          className="border p-2 w-full mb-4 rounded"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <div>
+          <input
+            type="password"
+            {...register("password")}
+            placeholder="Password"
+            className="border p-2 w-full"
+          />
+          <p className="text-red-500">{errors.password?.message}</p>
+        </div>
 
-        <button
-          onClick={handleSignup}
-          className="bg-green-500 hover:bg-green-600 text-white w-full py-2 rounded"
-        >
-          Sign Up
+        <button type="submit" className="bg-blue-500 text-white px-4 py-2">
+          Signup
         </button>
-
-        <p className="text-sm text-center mt-4">
-          Already have an account?
-          <a href="/login" className="text-blue-500 ml-1">
-            Login
-          </a>
-        </p>
-      </div>
+      </form>
     </div>
   );
 }

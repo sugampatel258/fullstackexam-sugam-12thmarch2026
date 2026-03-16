@@ -48,11 +48,25 @@ const checkout = async (req, res) => {
 };
 
 const getOrders = async (req, res) => {
-  const userId = req.user.userId;
+  try {
+    const userId = req.user.userId;
 
-  const orders = await Order.query().where("user_id", userId);
+    const orders = await Order.query()
+      .where("user_id", userId)
+      .orderBy("created_at", "desc");
 
-  res.json(orders);
+    return res.status(200).json({
+      success: true,
+      data: orders,
+    });
+  } catch (error) {
+    console.error("Get Orders Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch orders",
+    });
+  }
 };
 
 export const orderService = {

@@ -31,13 +31,12 @@ export default function Navbar() {
         {!isLoggedIn && (
           <>
             <Link href="/signin">Login</Link>
-            <Link href="/signup">Signup</Link>
           </>
         )}
 
         {isLoggedIn && (
           <>
-            {/* <Link href="/orders">Orders</Link> */}
+            <Link href="/orders">Orders</Link>
             <Link href="/cart">Cart</Link>
             <Link href="/reports">Reports</Link>
 

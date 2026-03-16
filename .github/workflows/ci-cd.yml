@@ -1,0 +1,73 @@
+name: FullStack CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Setup Node
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # ------------------------
+      # Backend Build
+      # ------------------------
+
+      - name: Install Backend Dependencies
+        working-directory: backend
+        run: npm install
+
+      - name: Build Backend
+        working-directory: backend
+        run: npm run build || echo "No build step"
+
+      # Run database migrations
+      - name: Run Database Migrations
+        working-directory: backend
+        run: npm run migrate
+
+      # ------------------------
+      # Frontend Build
+      # ------------------------
+
+      - name: Install Frontend Dependencies
+        working-directory: frontend
+        run: npm install
+
+      - name: Build Frontend
+        working-directory: frontend
+        run: npm run build
+
+      # ------------------------
+      # Deploy Backend (Render)
+      # ------------------------
+
+      - name: Deploy Backend to Render
+        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
+
+      # ------------------------
+      # Deploy Frontend (Vercel)
+      # ------------------------
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel
+
+      - name: Deploy Frontend to Vercel
+        working-directory: frontend
+        run: |
+          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+          vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+          vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
