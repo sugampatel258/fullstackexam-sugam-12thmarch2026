@@ -1,23 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useAuth } from "@/app/context/AuthContext";
 
 export default function Navbar() {
-  const router = useRouter();
-
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    typeof window !== "undefined" && localStorage.getItem("token")
-  );
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-
-    setIsLoggedIn(false);
-
-    router.push("/signin");
-  };
+  const { isLoggedIn, logout } = useAuth();
 
   return (
     <nav className="bg-black text-white p-4 flex justify-between">
@@ -31,6 +18,7 @@ export default function Navbar() {
         {!isLoggedIn && (
           <>
             <Link href="/signin">Login</Link>
+            <Link href="/signup">Signup</Link>
           </>
         )}
 
@@ -40,10 +28,7 @@ export default function Navbar() {
             <Link href="/cart">Cart</Link>
             <Link href="/reports">Reports</Link>
 
-            <button
-              onClick={handleLogout}
-              className="bg-red-500 px-3 py-1 rounded"
-            >
+            <button onClick={logout} className="bg-red-500 px-3 py-1 rounded">
               Logout
             </button>
           </>

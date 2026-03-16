@@ -7,13 +7,13 @@ import { loginSchema } from "@/validations";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuth } from "../context/AuthContext";
 
 type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function SigninPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { login } = useAuth();
 
   const {
     register,
@@ -29,7 +29,7 @@ export default function SigninPage() {
         `${process.env.NEXT_PUBLIC_BASE_URL}auth/login`,
         data
       );
-
+      login(res.data.token);
       localStorage.setItem("token", res.data.token);
 
       alert("Successfully Logged in!");
